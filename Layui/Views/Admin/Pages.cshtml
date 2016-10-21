@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Layui.ViewModels.PostList>
+
+@{
+    ViewBag.Title = "页面管理";
+}
+
+<h2>文章管理</h2>
+<table class="layui-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>分类</th>
+            <th>用户</th>
+            <th>标题</th>
+            <th>时间</th>
+            <th>评论</th>
+            <th>类型</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.CategoryName</td>
+                <td>@item.UserName</td>
+                <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                <td>@Layui.Helpers.ToDateTime(item.PostTime)</td>
+                <td>@Html.DisplayFor(modelItem => item.CommNums)</td>
+                <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                <td>
+                    @Html.ActionLink("编辑", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("删除", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts{
+<script type="text/javascript">
+    layui.use(['element'], function () {
+        layui.jquery('#left-page').addClass('layui-this');
+    });
+</script>
+}

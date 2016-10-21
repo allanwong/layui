@@ -1,0 +1,189 @@
+﻿@using Layui.Models
+@model  IEnumerable<Category>
+@{
+    ViewBag.title = "分类管理";
+}
+
+<h2>分类管理</h2>
+<hr /> 
+<div>
+    <button id="add" class="layui-btn">添加分类</button>
+    <table class="layui-table">
+        <thead>
+            <tr>
+                <th>编号</th>
+                <th>分类名</th>
+                <th>别名</th>
+                <th>编辑</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Category cate in Model)
+            {
+                <tr>
+                    <td>@cate.Id</td>
+                    <td>@cate.Name</td>
+                    <td>@cate.Alias</td>
+                    <td><a href="javascript:;" onclick="edit(@cate.Id)">修改</a> <a href="javascript:;" onclick="del(@cate.Id)">删除</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section scripts{
+
+<div id="detail" style="display:none;width:500px">
+    <form id="form-detail" name="form-detail" class="layui-form">
+        <input type="hidden" id="Id" name="Id" value="0" />
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="Name">分类名</label>
+            <div class="layui-input-block">
+                <input type="text" id="Name" name="Name" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <input type="hidden" id="Order" name="Order" />
+        </div>
+        <div class="layui-form-item">
+            <input type="hidden" id="Count" name="Count" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="Alias">别名</label>
+            <div class="layui-input-block">
+                <input type="text" id="Alias" name="Alias" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="Intro">简介</label>
+            <div class="layui-input-block">
+                <input type="text" id="Intro" name="Intro" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="RootID">根编号</label>
+            <div class="layui-input-block">
+                <input type="text" id="RootID" name="RootID" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="ParentID">父编号</label>
+            <div class="layui-input-block">
+                <input type="text" id="ParentID" name="ParentID" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="Template">模板</label>
+            <div class="layui-input-block">
+                <input type="text" id="Template" name="Template" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="LogTemplate">文章模板</label>
+            <div class="layui-input-block">
+                <input type="text" id="LogTemplate" name="LogTemplate" class="layui-input" />
+            </div>
+        </div>
+    </form>
+</div>
+
+    <script type="text/javascript">
+        function add() {
+            $.ajax({
+                url: '/api/category',
+                method: 'POST',
+                data: $('#form-detail').serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    layui.layer.msg('添加成功', function () {
+                        window.location.reload();
+                    });
+                   
+                },
+                error:function(response){
+                    layui.layer.alert('添加失败');
+                }
+            });
+        }
+        function edit(id) {
+            $.ajax({
+                url: '/api/category/' + id,
+                method: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    for (var r in response) {
+                        $('#' + r).val(response[r]);
+                    }
+                    layui.layer.open({
+                        title: '编辑分类',
+                        type: 1,
+                        area: ['560px', '468px'],
+                        content: $('#detail'), //这里content是一个DOM
+                        btn: ['修改', '取消'],
+                        yes: function (index) {
+                            save();
+                            layer.close(index);
+                        }
+                    });
+                },
+                error: function (response) {
+                    layui.layer.alert('读取数据失败');
+                }
+            });
+        }
+        function save() {
+            $.ajax({
+                url: '/api/category/' + $('#Id').val(),
+                method: 'PUT',
+                data: $('#form-detail').serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    layui.layer.msg('修改成功', function () {
+                        window.location.reload();
+                    });
+                },
+                error: function (response) {
+                    layui.layer.alert('修改失败');
+                }
+            });
+        }
+        function del(id) {
+            $.ajax({
+                url: '/api/category/' + id,
+                method: 'DELETE',
+                dataType: 'json',
+                success: function (response) {
+                    layui.layer.msg( response.Name + '已删除', function () {
+                        window.location.reload();
+                    });
+                },
+                error: function (response) {
+                    layui.layer.alert('删除失败');
+                }
+            });
+        }
+        layui.use(['element', 'form'], function () {
+            var layer = layui.layer;
+            layui.jquery('#left-cate').addClass('layui-this');
+            layui.jquery('#add').click(function () {
+                document.getElementById('form-detail').reset()
+                layui.jquery('#Id').val(0);
+                layui.jquery('#Order').val(0);
+                layui.jquery('#Count').val(0);
+                layui.jquery('#RootID').val(0);
+                layui.jquery('#ParentID').val(0);
+                layer.open({
+                    title:'添加分类',
+                    type: 1,
+                    area: ['560px', '468px'],
+                    content: $('#detail'), //这里content是一个DOM
+                    btn: ['添加', '取消'],
+                    yes: function (index) {
+                        add();
+                        layer.close(index);
+                    }
+                });
+            });
+        });
+    </script>
+}

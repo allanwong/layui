@@ -1,0 +1,119 @@
+﻿@using Microsoft.AspNet.Identity.EntityFramework
+@model  IEnumerable<IdentityRole>
+@{
+    ViewBag.title = "角色管理";
+}
+
+<h2>用户管理</h2>
+<hr />
+<div style="width:400px">
+    <button id="add" class="layui-btn">添加角色</button>
+    <table class="layui-table">
+        <thead>
+            <tr>
+                <th>角色名</th>
+                <th>描述</th>
+                <th>编辑</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (IdentityRole role in Model)
+            {
+                <tr>
+                    <td>@role.Name</td>
+                    <td>@miaoshu(role.Name)</td>
+                    <td><a href="javascript:;" onclick="edit(@role.Id)">修改</a> <a href="javascript:;" onclick="del(@role.Id)">删除</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@helper miaoshu(string name)
+{
+    if (name == "admin")
+    {
+        <div>管理员</div>
+    }
+    else
+    {
+        <div>游客</div>
+    } 
+}
+@section scripts{
+
+    <script type="text/javascript">
+ 
+        function edit(id) {
+            $.ajax({
+                url:'/api/Role/' + id,
+                method:'GET',
+                dataType:'json',
+                success:function(response){
+                    layui.layer.prompt({
+                        title:'请输入角色名',
+                        value:response.Name
+                    },function (value,index) {
+                        $.ajax({
+                            url:'/api/Role',
+                            method:'POST',
+                            data:{Id:response.Id,Name:value},
+                            dataType:'json',
+                            success:function(){
+                                layer.msg( '修改成功', function () {
+                                    window.location.reload();
+                                });
+                            },
+                            error:function(){
+                                layer.alert('添加失败');
+                            }
+                        });
+                        layer.close(index);
+                    });
+                },
+                error:function(){
+                    layui.layer.alert('无法读取，您可能没权限修改');
+                }
+            });
+        }
+        function del(id) {
+            $.ajax({
+                url: '/api/Role/' + id,
+                method: 'DELETE',
+                dataType: 'json',
+                success: function (response) {
+                    layui.layer.msg( response.Name + '已删除', function () {
+                        window.location.reload();
+                    });
+                },
+                error: function (response) {
+                    layui.layer.alert('删除失败');
+                }
+            });
+        }
+        layui.use(['element', 'form'], function () {
+            var layer = layui.layer;
+            layui.jquery('#left-role').addClass('layui-this');
+            layui.jquery('#add').click(function () {
+                layer.prompt({
+                    title:'请输入需添加的角色名',
+                },function (value,index) {
+                    layui.jquery.ajax({
+                        url:'/api/Role',
+                        method:'POST',
+                        data:{Id:0,Name:value},
+                        dataType:'json',
+                        success:function(){
+                            layer.msg( '添加成功', function () {
+                                window.location.reload();
+                            });
+                        },
+                        error:function(){
+                            layer.alert('添加失败');
+                        }
+                    });
+                    layer.close(index);
+                });
+            });
+        });
+    </script>
+}

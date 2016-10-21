@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+<h1 class="site-h1">@ViewBag.Title.</h1>
+<h3 class="site-h3">@ViewBag.Message</h3>
+
+<p>Use this area to provide additional information.</p>
+@section scripts{
+<script type="text/javascript">
+    layui.use(['element'], function () {
+        var layer = layui.layer;
+        layui.jquery('#menu-about').addClass('layui-this');
+    });
+</script>
+}

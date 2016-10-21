@@ -1,0 +1,49 @@
+﻿@model Layui.ViewModels.LoginViewModel
+
+@{
+    ViewBag.Title = "登录";
+}
+
+<h2 class="site-h2">@ViewBag.Title </h2>
+<div style="width:400px">
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "layui-form", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.UserName, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @Html.TextBoxFor(m => m.UserName, new { @class = "layui-input" })
+            @Html.ValidationMessageFor(m => m.UserName)
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Password, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @Html.PasswordFor(m => m.Password, new { @class = "layui-input" })
+            @Html.ValidationMessageFor(m => m.Password)
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="checkbox" name="RememberMe" id="RememberMe" title="记住我?"   />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="login">登录</button>
+            @Html.ActionLink("注册新用户", "Register", null, new { @class = "layui-btn layui-btn-normal" })
+        </div>
+    </div>
+ 
+            }
+ 
+ 
+</div>
+@section Scripts {
+     <script type="text/javascript">
+         layui.use(['element', 'form'], function () {
+             var form = layui.form();
+         });
+     </script>
+}

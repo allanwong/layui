@@ -1,0 +1,127 @@
+﻿@model Layui.Models.Post
+
+@{
+    ViewBag.Title = "新建文章";
+}
+
+<h2 class="site-h2">新建文章</h2>
+<hr />
+<form class="layui-form" method="post">
+      @Html.AntiForgeryToken()
+      @Html.ValidationSummary()
+    <input type="hidden"  id="Id" name="Id" value="0" />
+    <div class="wapper-editor">
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="Title">标题</label>
+            <div class="layui-input-block">
+                <input type="text" id="Title" name="Title" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="Alias">别名</label>
+            <div class="layui-input-inline">
+                <input type="text" id="Alias" name="Alias" class="layui-input" value="" />
+            </div>
+            <div class="layui-form-mid layui-word-aux">.html</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="Tag">Tags</label>
+            <div class="layui-input-block">
+                <input type="text" id="Tag" name="Tag" class="layui-input" value="" />
+            </div>
+        </div>
+        <div>正文：</div>
+        <div><textarea id="Content" name="Content" style="display: none;"></textarea></div>
+        <div><label for="Intro">摘要:</label></div>
+        <div>
+            <input type="text" id="Intro" name="Intro" class="layui-input" value=" " />
+        </div>
+    </div>
+    <div class="wapper-editor-right">
+        <div class="layui-form-item">
+            <div class="col-md-offset-2 layui-input-block">
+                <button class="layui-btn layui-btn-big" lay-submit lay-filter="a">保存</button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="CategoryID">分类</label>
+            <div class="layui-input-block">
+                @Html.DropDownList("CategoryID")
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="Template">模板</label>
+            <div class="layui-input-block">
+                <input type="text" id="Template" name="Template" class="layui-input" value="" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="MemID">用户名</label>
+            <div class="layui-input-block">
+                @Html.DropDownList("MemID")
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="Status">状态</label>
+            <div class="layui-input-block">
+                <select id="Status" name="Status" class="layui-input"><option value="0">公开</option><option value="1">草稿</option><option value="2">审核</option></select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="Type">Type</label>
+            <div class="layui-input-block">
+                <input type="text" id="Type" name="Type" class="layui-input" value="0" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="PostTime">日期</label>
+            <div class="layui-input-block">
+                <input type="text" id="PostTime" name="PostTime" class="layui-input" value="@DateTime.Now.ToString()" />
+            </div>
+        </div>
+        <div><input type="hidden" id="CommNums" name="CommNums" value="0" /></div>
+        <div><input type="hidden" id="ViewNums" name="ViewNums" value="0" /></div>
+        <div><input type="hidden" id="Meta" name="Meta" value="" /></div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="IsTop">置顶</label>
+            <div class="layui-input-block">
+                <input type="checkbox" title="置顶" value="IsTop" lay-filter="checkbox" />
+                <input type="hidden" id="IsTop" name="IsTop" class="layui-input" value="false" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="IsLock">锁定</label>
+            <div class="layui-input-block">
+                <input type="checkbox" title="锁定" value="IsLock" lay-filter="checkbox" />
+                <input type="hidden" id="IsLock" name="IsLock" class="layui-input" value="false)" />
+            </div>
+        </div>
+    </div>
+    <div class="layui-clear"></div>
+</form>
+ 
+
+@section scripts{
+    <script type="text/javascript">
+        layui.use(['element', 'layedit', 'form', 'laydate'], function () {
+            layui.jquery('#left-new').addClass('layui-this');
+            var layer = layui.layer;
+            var form = layui.form();
+            //编辑器
+            var layedit = layui.layedit;
+            layedit.build('Content', {
+                uploadImage: { url: 'Upload/', type: 'post' }
+            });
+            //多选框处理
+            form.on('checkbox(checkbox)', function (data) {
+                layui.jquery('#' + data.value).val(data.elem.checked);
+            });
+            //提交前处理
+            form.on('submit(a)', function (data) {
+                var timestamp = Date.parse(new Date());
+                timestamp = timestamp / 1000;
+                layui.jquery('#PostTime').val(timestamp);
+            });
+        });
+    </script>
+}

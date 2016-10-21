@@ -1,0 +1,54 @@
+﻿@using Layui.Models;
+@using Microsoft.AspNet.Identity;
+@model Layui.ViewModels.ManageUserViewModel
+@{
+    ViewBag.Title = "管理帐户";
+}
+
+<h2 class="site-h2"> @ViewBag.Title </h2>
+<hr />
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+
+<p>你已使用以下身份登录: <strong>@User.Identity.GetUserName()</strong>。</p>
+<div style="width:400px">
+    @using (Html.BeginForm("Manage", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <h4>“更改密码”表单</h4>
+        <hr />
+        @Html.ValidationSummary()
+        <div class="layui-form-item">
+            @Html.LabelFor(m => m.OldPassword, new { @class = "layui-form-label" })
+            <div class="layui-input-block">
+                @Html.PasswordFor(m => m.OldPassword, new { @class = "layui-input" })
+            </div>
+        </div>
+        <div class="layui-form-item">
+            @Html.LabelFor(m => m.NewPassword, new { @class = "layui-form-label" })
+            <div class="layui-input-block">
+                @Html.PasswordFor(m => m.NewPassword, new { @class = "layui-input" })
+            </div>
+        </div>
+        <div class="layui-form-item">
+            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "layui-form-label" })
+            <div class="layui-input-block">
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "layui-input" })
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit>更改密码</button>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        layui.use(['element', 'form'], function () {
+            var form = layui.form();
+            var layer = layui.layer;
+        });
+    </script>
+}

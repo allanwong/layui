@@ -1,0 +1,40 @@
+﻿body {
+
+}
+
+.site-h1 {
+    margin-bottom: 20px;
+    line-height: 60px;
+    padding-bottom: 10px;
+    color: #393D49;
+    border-bottom: 1px solid #eee;
+    font-size: 28px;
+    font-weight: 300;
+}
+
+.site-h2{
+    margin:18px 0 18px 0;
+    line-height: 40px;
+    font-size: 20px;
+}
+
+.header{
+    height: 60px;
+    border-bottom: 1px solid #404553;
+    background-color: #393D49;
+    color: #fff;
+ 
+ 
+}
+.logo{display:inline-block;  padding-right:100px ; color:#ffffff; font-size:16pt; line-height:60px}
+#menu-main{ 
+    position: absolute;
+    top:0;
+    left:200px;
+}
+#menu-login{
+     position: absolute;
+     top:0;
+     right:0;
+}
+

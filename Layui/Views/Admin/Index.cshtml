@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.title = "default";
+}
+
+ 
+<div>
+
+    <span style="font-size:110pt">后台首页</span>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        layui.use(['element'], function () {
+            var layer = layui.layer;
+            layui.jquery('#menu-contact').addClass('layui-this');
+        });
+    </script>
+}

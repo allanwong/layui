@@ -1,0 +1,48 @@
+﻿@model Layui.ViewModels.RegisterViewModel
+
+@{
+    ViewBag.Title = "注册";
+}
+
+<h2 class="site-h2"> @ViewBag.Title </h2>
+<hr />
+<form id="form-register" name="form-register" action="~/Account/Register" method="post" class="layui-form" style="width:400px">
+    <h4>创建新帐户。</h4>
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    <div class="layui-form-item">
+        <label for="UserName" class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+            <input type="text" id="UserName" name="UserName" value="@Model.UserName" class="layui-input" lay-verify="required" />
+            @Html.ValidationMessageFor(m => m.UserName)
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="Password" class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+            <input type="password" id="Password" name="Password" class="layui-input" lay-verify="required" />
+            @Html.ValidationMessageFor(m => m.Password)
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="ConfirmPassword" class="layui-form-label">确认密码</label>
+        <div class="layui-input-block">
+            <input type="password" id="ConfirmPassword" name="ConfirmPassword" class="layui-input" lay-verify="required" />
+            @Html.ValidationMessageFor(m => m.ConfirmPassword)
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit>注册</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script type="text/javascript">
+        layui.use(['element', 'form'], function () {
+            var form = layui.form();
+            var layer = layui.layer;
+        });
+    </script>
+}
